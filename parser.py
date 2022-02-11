@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 from bs4 import BeautifulSoup
 
 url = "https://jobs.dou.ua/vacancies/?remote&category=Python&exp=0-1"
@@ -15,7 +16,12 @@ soup = BeautifulSoup(resp, "lxml")
 
 vacancies_html = soup.find_all(class_="vacancy")
 
-all_vacancies = dict()
+if os.path.exists(f"{os.getcwd()}/all_vacancies.json"):
+    with open("all_vacancies.json", "r", encoding="utf-8") as file:
+        all_vacancies = json.load(file)
+else:
+    all_vacancies = dict()
+
 for vacancy in vacancies_html:
     vacancy_div = vacancy.find(class_="title")
     vacancy_title = vacancy_div.find("a", class_="vt").text
