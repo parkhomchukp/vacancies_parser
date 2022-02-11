@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 url = "https://jobs.dou.ua/vacancies/?remote&category=Python&exp=0-1"
 
@@ -29,7 +30,7 @@ for vacancy in vacancies_html:
     vacancy_link = vacancy_div.find("a", class_="vt").get("href")
 
     if f"{vacancy_title} at {vacancy_company}" not in all_vacancies.keys():
-        all_vacancies[f"{vacancy_title} at {vacancy_company}"] = vacancy_link
+        all_vacancies[f"{vacancy_title} at {vacancy_company} ({datetime.now()})"] = vacancy_link
 
 with open("all_vacancies.json", "w", encoding="utf-8") as file:
     json.dump(all_vacancies, file, indent=4, ensure_ascii=False)
